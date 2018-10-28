@@ -1,10 +1,12 @@
+# Vagrantfile
+
 RELEASE='Alpha'
 
 VM_MEMORY=8192
 VM_CORES=2
 
 Vagrant.configure('2') do |config|
-  config.vm.box = 'bento/ubuntu-16.04'
+  config.vm.box = 'bento/ubuntu-18.04'
 
   config.vm.provider :virtualbox do |v, override|
     v.memory = VM_MEMORY
@@ -24,30 +26,11 @@ Vagrant.configure('2') do |config|
     end
   end
 
-  config.vm.provision 'shell', privileged: true, inline:
-    "sed -i 's|deb http://us.archive.ubuntu.com/ubuntu/|deb mirror://mirrors.ubuntu.com/mirrors.txt|g' /etc/apt/sources.list
-    dpkg --add-architecture i386
-    apt-get -q update
-    apt-get purge -q -y snapd lxcfs lxd ubuntu-core-launcher snap-confine
-    apt-get -q -y install \
-      autoconf \
-      automake \
-      bc \
-      build-essential \
-      bzr \
-      cvs \
-      libc6:i386 \
-      git \
-      libc6:i386 \
-      libncurses5-dev \
-      mercurial \
-      squashfs-tools \
-      ssh-askpass \
-      subversion \
-      unzip \
-      vim
-    apt-get -q -y autoremove
-    apt-get -q -y clean
-    update-locale LC_ALL=C"
-
+  config.vm.provision 'shell', privileged: true, path: 'shell_scripts/install_via_apt.sh'
+  config.vm.provision 'shell', privileged: true, path: 'shell_scripts/install_fwup.sh'
+  config.vm.provision 'shell', privileged: false, path: 'shell_scripts/install_asdf.sh'
+  config.vm.provision 'shell', privileged: false, path: 'shell_scripts/install_erlang.sh'
+  config.vm.provision 'shell', privileged: false, path: 'shell_scripts/install_elixir.sh'
+  config.vm.provision 'shell', privileged: false, path: 'shell_scripts/install_nodejs.sh'
+  config.vm.provision 'shell', privileged: false, path: 'shell_scripts/install_nerves.sh'
 end

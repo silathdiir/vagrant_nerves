@@ -3,5 +3,4 @@
 ## Schedule
 
 - [x] Copies the basic Vagrantfile from **Buildroot**.
-- [ ] Installs `nerves`.
-- [ ] Installs `vim` plugins.
+- [x] Installs `nerves`.
